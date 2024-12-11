@@ -1,17 +1,20 @@
-# Use the appropriate Python version
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy application code
+# Copy the current directory contents into the container
 COPY . /app
 
-# Install dependencies
-RUN pip install --no-cache-dir flask gunicorn
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
-EXPOSE 80
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
-# Run the application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
+# Define environment variable
+ENV FLASK_APP=app.py
+
+# Run the application when the container starts
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8080"]
